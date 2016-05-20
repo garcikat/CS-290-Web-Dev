@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>How-to-Guide</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<style>
+			/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+			.row.content {height: 1500px}
+			
+			/* Set gray background color and 100% height */
+			.sidenav {
+				background-color: #f1f1f1;
+				height: 100%;
+				padding-left: 25px;
+				padding-top:25px;
+				width:220px;
+			}
+    
+			/* Set black background color, white text and some padding */
+			footer {
+				background-color: #555;
+				color: white;
+				padding: 15px;
+			}
+			
+			.buttons {
+				padding-top: 50px;
+				padding-bottom: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row content">
+				<div class="col-sm-2 sidenav">
+					<h4 class="text-center">GoT API Guide</h4>
+					<ul class="nav nav-pills nav-stacked">
+						<li><a href="guideHome.html">Home</a></li>
+						<li class="active"><a href="guidePage2.html">How the API works</a></li>
+						<li><a href="guidePage3.html">How to Use</a></li>
+						<li><a href="guidePage4.html">Common Problems</a></li>
+						<br>
+						<li><a href="https://anapioficeandfire.com/" ><strong>An API of Ice and Fire</strong></a></li>
+					</ul>
+				</div><!--side nav-->
+
+				<div class="col-sm-9">
+					<div class="jumbotron" style="background-color:#ffbf80">
+						<h2>How the API Works</h2>
+					</div><!--jumbotron-->
+					
+					<h3>What is an API</h3>
+					<p>An <strong>A</strong>pplication <strong>P</strong>rogram <strong>I</strong>nterace is way for software
+					to talk to one another within a structured format. For example, let's say an app wants to the top 10
+					headlines from a news webpage. Without an API, it would have to read the webapge and interpret the content.
+					If the news webpage would happen to change (something that happens often), then the app would not likely find
+					the information it's looking for.
+					But with an API, an app can send a request to the news webapge in a certain format and the news webpage
+					responds back with a structured response. The app can access the data from the webpage much more easily regardless
+					how much the webpage changes.
+					</P>
+					<h3>Request</h3>
+					<p>
+						It all begins with a request. To create a request we are going to use AJAX. Here is an example of a simple request
+						to the API of Ice and Fire.
+						<pre>
+var req = new XMLHttpRequest();
+req.open("GET", "http://www.anapioficeandfire.com/api/characters", false);
+req.addEventListener('load',function(){
+	if(req.status >= 200 && req.status < 400){ <--Katie add to common problems
+		var response = JSON.parse(req.responseText);
+		console.log(response);
+	}
+	else{ <-- Add to common problems
+		console.log("Error in network request: " + request.statusText);
+	}
+});
+req.send(null);
+event.preventDefault(); <--common problems
+						</pre>
+						<br>Let's break it down.<br><br>
+						<code>var req = new XMLHttpRequest();</code>&nbsp - This creates an <strong>XMLHttpRequest</strong>
+						object which is responsible for creating the HTTP request and receiving the returned data.
+						It's the beginning of the conversation between software.<br><br>
+						
+						<code>req.open("GET", "http://www.anapioficeandfire.com/api/characters", true);</code>&nbsp-
+						The request object is opening a GET request to the webpage <u>http://www.anapioficeandfire.com/api/characters</u>.
+						The <code>"GET"</code> argument is the type of request we are sending. It's basically used for "getting" data. The other
+						type of request is a POST but it is not used with this API. 
+						The last argument <code>false</code>  means that this is a synchronous request. If you want to send a asychronous request,
+						replace the argrument with <code>true</code>.<br><br>
+						
+						<code>var response = JSON.parse(req.responseText);)</code>&nbsp- 
+						Here we are taking the response text sent to us by <u>http://www.anapioficeandfire.com/api/characters</u>
+						and parsing it into a readable format.<br><br>
+						
+						<code>console.log(response);</code>&nbsp - This logs the request to the console so that we can see 
+						the response. It's a nice thing to use to make sure we are getting the information that we want, what
+						keys are used and how the data is organized.<br><br>
+						
+						<code>req.send(null);</code>&nbsp- Now we are sending the request to the webpage. Since this is a GET
+						request, we set the parameter for the <code>send</code> function to <code>null</code>. If this were a POST request, then 
+						the send function would usually take a JSON string.<br><br>
+						
+						Another thing to note is that usually APIs require the use of an appid which allows the API to track who is making a request.
+						But this API does not require any appid so you don't have to worry about registering.<br><br>
+						
+					</p>	
+					<h3>Response</h3>
+					<p>
+						The data that the webpage sends back is a JSON object. The length of the response depends on what was requested 
+						and the result of the request. The response always sends an array of Objects, even if you only request a single item.
+						To access the Objects within the array, we have to use an index. The following page shows some example and details on how to
+						do this.
+						The examples below are from the <code>console.log(response)</code>. If you are in Chrome, 
+						press CNTRL-SHIFT-I to access the console and other developer tools.<br><br>
+						<div class="row">
+							<div class="col-md-6">
+								The response could be a single object array: <br><br><img src="JSONobject.jpg" class="img-thumbnail">
+							</div>
+							<div class="col-md-6">
+								Or an array of multiple objects:<br><br><img src="JSONarray.jpg" class="img-thumbnail"><br><br><br>
+							</div>	
+						</div><!--row content-->
+						<br>
+						Clicking on the arrow displays all the objects within the array. Clicking on the arrow next to the indexed Objects displays
+						all the data which is formatted into key: value pairs. Some of the data is a single string value like <code>born:</code>
+						and others are arrays like <code>aliases:</code>. The next page will cover how to extract values within the object(s) for both
+						single strings and arrays.<br><br><img src="JSONdetails.jpg" class="img-thumbnail"><br><br>
+					</p>
+					
+					<p>
+						<h3>More Info</h3>
+						AJAX: <a href="http://www.tutorialspoint.com/ajax/">http://www.tutorialspoint.com/ajax/</a><br>
+						JSON: <a href="http://www.tutorialspoint.com/json/">http://www.tutorialspoint.com/json/</a><br>
+						POST and GET Requests: <a href="http://www.w3schools.com/tags/ref_httpmethods.asp">http://www.w3schools.com/tags/ref_httpmethods.asp</a><br>
+						Asynchronous requests: <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests">
+						https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests</a><br>
+					</p>
+					<div class="text-center buttons">
+						<a href="guideHome.html" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-menu-left">Previous
+						</span></a>
+						<a href="guidePage3.html" class="btn btn-info btn-lg">Next<span class="glyphicon glyphicon-menu-right">
+						</span></a>
+					</div><!--buttons-->
+				</div><!--col-sm-9 -->
+			</div><!--row content-->
+		</div><!--container-fluid-->
+		<footer>
+		
+		</footer>
+	</body>
+</html>
