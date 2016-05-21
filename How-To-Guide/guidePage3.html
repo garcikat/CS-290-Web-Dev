@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>How-to-Guide</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<style>
+			/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+			.row.content {height: 1500px}
+			
+			/* Set gray background color and 100% height */
+			.sidenav {
+				background-color: #f1f1f1;
+				height: 100%;
+				padding-left: 25px;
+				padding-top: 25px;
+				width:220px;
+			}
+    
+			/* Set black background color, white text and some padding */
+			footer {
+				background-color: #555;
+				color: white;
+				padding: 15px;
+			}
+			
+			.buttons {
+				padding-top: 50px;
+				padding-bottom: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row content">
+			
+				<div class="col-sm-2 sidenav">
+					<ul class="nav nav-pills nav-stacked">
+						<li><a href="guideHome.html">Home</a></li>
+						<li><a href="guidePage2.html">How the API works</a></li>
+						<li class="active"><a href="guidePage3.html">How to Use</a></li>
+						<li><a href="guidePage4.html">Common Problems</a></li>
+						<br>
+						<li><a href="https://anapioficeandfire.com/" ><strong>An API of Ice and Fire</strong></a></li>
+					</ul>
+				</div><!--side nav-->
+
+				<div class="col-sm-9">
+					<div class="jumbotron" style="background-color:#ffbf80">
+						<h5>How-to-Guide: An API of Ice and Fire</h5>
+						<h2>Using the API of Ice and Fire</h2>
+					</div><!--jumbotron-->
+
+					<h3>Resource Categories</h3>
+					<p>
+						There are 3 different categories of information available from the API: books, characters and houses.
+						Using the API root URL <code>"http://www.anapioficeandfire.com/api"</code> in the request returns these categories and
+						their respective URLs.<br><br>
+						If the category name is included in the URL it will respond with ALL the resources within that category.<br>
+						<ul>	
+							<li><code>"http://www.anapioficeandfire.com/api/characters"</code>&nbsp- Returns ALL characters. Each object in the response 
+								represents a character.
+							</li>
+							<li><code>"http://www.anapioficeandfire.com/api/houses"</code>&nbsp- Returns ALL houses. Each object in the response 
+								represents a house.
+							</li>
+							<li><code>"http://www.anapioficeandfire.com/api/book"</code>&nbsp- Returns ALL books. Each object in the response 
+								represents a book.
+							</li>
+						</ul>
+					</p>
+					<br>
+					<h3>Using Filters</h3>
+					<p>
+						If you are familiar with the novels or the television series, you are aware that there are many characters and houses. The API has
+						data for characters that don't even have names. The category URLs above will return a significant amount of information and to sift through 
+						all the objects looking for what data you want will take a very long time. 
+						Luckily for us the developers created request filters. Using these filters allows users to access data that have certain key values.
+						<br><br>
+						For example, lets say I want all characters who's culture are "Northmen". The URL I would use in my request would be
+						<code>"http://www.anapioficeandfire.com/api/characters?culture=Northmen"</code><br>
+						<ul>
+							<li><code>?</code>&nbsp - means that we are adding filters/parameters to the request.</li>
+							<li><code>culture=Northmen</code>&nbsp - culture is the filter and Northmen is the value that we want.</li>
+						</ul>
+						<br>
+						It can be even more refined. We could use multiple filters in a single request. Let's say I want all female characters who's culture is Northmen. My request would be
+						<code>"http://www.anapioficeandfire.com/api/characters?culture=Northmen&gender=female"</code><br><br>
+						<ul>
+							<li><code>"&"</code>&nbsp- separates multiple filter/parameters. </li>
+						</ul>
+						<br>
+						There is a list of filters for each category. The tables shown below are from the <a href="https://anapioficeandfire.com/Documentation">API Documentation</a>.
+						<br>
+						<h3><small>Character Filters</small></h4>
+						<img src="charFilters.jpg" class="img-thumbnail"><br>
+						<h3><small>House Filters</small></h3>
+						<img src="houseFilters.jpg" class="img-thumbnail"><br>
+						<h3><small>Book Filters</small></h3>
+						<img src="bookFilters.jpg" class="img-thumbnail"><br>
+					</p>
+					<br>	
+					<h3>Page Size and Number</h3>
+					<p>
+						Other parameters that are available are the page size and page number. I will not go into to much detail
+						here because the <a href="https://anapioficeandfire.com/Documentation#pagination">API documentation</a>
+						explains their pagination pretty well. Basically you can alter how many objects are returned per page as well as request specific pages.<br><br>
+						Here is a quick example of a request:<code>"http://www.anapioficeandfire.com/api/characters?culture=Northmen&page=3&pageSize=50"</code>
+					</p>
+					<br>
+					<h3>Extracting Attributes</h3>
+					<p>
+						<h3><small>Single Object</small></h3>
+						So now that we know how to request objects from the API, here's how we extract the data values we are interested in.
+						Let's say I request Arya Stark's information. My URL for the GET request would be 
+						<code>"http://www.anapioficeandfire.com/api/characters?name=Arya Stark"</code>.<br>
+						Here is the response I received.<br><br>
+						<img src="aryaDetails.jpg" class="img-thumbnail"><br>
+						<br>
+						As you can see, there is a lot of information available about Arya. The Documentation has a table of all the object's
+						key value pairs for each category.<br><br>
+						<ul>
+							<li><a href="https://anapioficeandfire.com/Documentation#characters">Character Attribute Table</a></li>
+							<li><a href="https://anapioficeandfire.com/Documentation#houses">House Attribute Table</a></li>
+							<li><a href="https://anapioficeandfire.com/Documentation#books">Book Attribute Table</a></li>
+						</ul>
+						<br>
+						Now let's say that I only want her name, culture, birth date and aliases. We can extract specific 
+						values and display them by looking at the <code>console.log(response)</code>
+						and finding the keys we want. Below is an image of the keys we are looking for.<br><br>
+						<img src="aryaKeys.jpg" class="img-thumbnail"><br><br>
+						Now that we found the keys for the data we want, we can access each key value by using <code>response[index].key</code>.
+						Keep in mind that the API responds with an array of objects so we have to use an index when accessing each object.
+						Using our example, to extract Arya's name I use <code>response[0].name</code>. Since Arya is the only object in this example, 
+						I used index 0. To access a key that contains an array like a character's aliases, I created a string variable <code>aliasesList</code>
+						and looped through the whole aliases array adding each name and a comma. Here is a basic example of how we can extract all the data we want 
+						and display it to a simple HTML webpage.
+						<br><br>
+						<pre>
+var req = new XMLHttpRequest();
+req.open("GET", "http://www.anapioficeandfire.com/api/characters?name=Arya Stark", false);
+req.send(null);
+var response = JSON.parse(req.responseText);
+var aliasesList = "";
+for (var i in response[0].aliases){
+	aliasesList += response[0].aliases[i] + ", ";
+}
+document.getElementById('name').textContent = response[0].name;
+document.getElementById('culture').textContent = response[0].culture;
+document.getElementById('born').textContent = response[0].born;
+document.getElementById('aliases').textContent = aliasesList;
+						</pre>
+						Here is the result with the corresponding HTML code below.<br><br>
+						<img src="aryaHTML.jpg" class="img-thumbnail">
+					</p>
+					<h3><small>Multiple Objects</small></h3>
+					<p>
+						The code for extracting data values for multiple objects is similar but there are a few changes made to make
+						the result webpage look more readable.
+						<pre>
+var req = new XMLHttpRequest();
+req.open("GET", "http://www.anapioficeandfire.com/api/characters?culture=Northmen" false);
+req.send(null);
+var response = JSON.parse(req.responseText);
+console.log(response);
+var resultList = "";
+for (var obj in response){
+	resultList +=  "&lt;li&gt;" +  response[obj].name + "&lt;br&gt;" +
+				"culture: " + response[obj].culture + "&lt;br&gt;" +
+				"born: " + response[obj].born + "&lt;br&gt;" +
+				"aliases: ";		
+	for (var i in response[obj].aliases){
+		resultList += response[obj].aliases[i] + ", ";
+	}
+	resultList += "&lt;/li&gt;&lt;br&gt;";
+}
+document.getElementById('result').innerHTML = resultList;
+						</pre>
+						A string variable <code>resultList</code> is added so that I could replace the innerHTML within a
+						<code>&lt;ul&gt;</code> tag. Looping through each object in the response with
+						<code>for (var obj in response)</code>, each name, culture, birth and list of aliases is added 
+						to <code>resultList</code> along with some HTML tags to organize the data more nicely.<br><br>
+						Here is the result with the corresponding HTML code below.<br>
+						<img src="multObjectsData.jpg" class="img-thumbnail">
+						<br><br>
+						Now you're equipped to request, receive and extract any data you wish to use. The following page covers
+						some common problems you might encounter when using the API of Ice and Fire.
+					</p>
+					<div class="text-center buttons">
+						<a href="guidePage2.html" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-menu-left">Previous
+						</span></a>
+						<a href="guidePage4.html" class="btn btn-info btn-lg">Next<span class="glyphicon glyphicon-menu-right">
+						</span></a>
+					</div><!--buttons-->
+				</div><!--col-sm-9 -->
+			</div><!--row content-->
+		</div><!--container-fluid-->
+		<footer>
+		
+		</footer>
+	</body>
+</html>
