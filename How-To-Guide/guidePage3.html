@@ -108,9 +108,12 @@
 						here because the <a href="https://anapioficeandfire.com/Documentation#pagination">API documentation</a>
 						explains their pagination pretty well. Basically you can alter how many objects are returned per page as well as request specific pages.<br><br>
 						Here is a quick example of a request:<code>"http://www.anapioficeandfire.com/api/characters?culture=Northmen&page=3&pageSize=50"</code>
+						
+						<br><br>If a request is made that matches many objects, like all characters who's culture is Northmen, your request will be broken into
+						several pages. To access the data on the next pages, alter the page number in the request URL.<br><br>
 					</p>
 					<br>
-					<h3>Extracting Attributes</h3>
+					<h3>Extracting Values</h3>
 					<p>
 						<h3><small>Single Object</small></h3>
 						So now that we know how to request objects from the API, here's how we extract the data values we are interested in.
@@ -132,7 +135,7 @@
 						and finding the keys we want. Below is an image of the keys we are looking for.<br><br>
 						<img src="aryaKeys.jpg" class="img-thumbnail"><br><br>
 						Now that we found the keys for the data we want, we can access each key value by using <code>response[index].key</code>.
-						Keep in mind that the API responds with an array of objects so we have to use an index when accessing each object.
+						Keep in mind that because we used a filter, the API responds with an array of objects so we have to use an index when accessing each object.
 						Using our example, to extract Arya's name I use <code>response[0].name</code>. Since Arya is the only object in this example, 
 						I used index 0. To access a key that contains an array like a character's aliases, I created a string variable <code>aliasesList</code>
 						and looped through the whole aliases array adding each name and a comma. Here is a basic example of how we can extract all the data we want 

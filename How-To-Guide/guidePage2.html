@@ -80,7 +80,7 @@ console.log(response);
 						
 						<code>req.open("GET", "http://www.anapioficeandfire.com/api/characters", true);</code>&nbsp-
 						The request object is opening a GET request to the webpage <u>http://www.anapioficeandfire.com/api/characters</u>.
-						The <code>"GET"</code> argument is the type of request we are sending. It's basically used for "getting" data. The another
+						The <code>"GET"</code> argument is the type of request we are sending. It's basically used for "getting" data. Another
 						type of request is a POST but it is not used with this API. 
 						The last argument <code>false</code>  means that this is a synchronous request. If you want to send a asychronous request,
 						replace the argrument with <code>true</code>. In all of the examples we use synchronous requests for simplicity reasons.
@@ -90,6 +90,7 @@ console.log(response);
 						<code>req.send(null);</code>&nbsp- Now we are sending the request to the webpage. Since this is a GET
 						request, we set the parameter for the <code>send</code> function to <code>null</code>. If this were a POST request, then 
 						the send function would usually take a JSON string.<br><br>						
+						
 						<code>var response = JSON.parse(req.responseText);)</code>&nbsp- 
 						Here we are taking the response text sent to us by <u>http://www.anapioficeandfire.com/api/characters</u>
 						and parsing it into a readable format.<br><br>
@@ -99,14 +100,14 @@ console.log(response);
 						keys are used and how the data is organized.<br><br>
 				
 						Another thing to note is that usually APIs require the use of an appid which allows the API to track who is making a request.
-						But this API does not require any appid so you don't have to worry about registering.<br><br>					
+						But this API only allows GET requests, so it doesn't require any appid so you don't have to worry about registering for one.<br><br>					
 					</p>	
 					<h3>Response</h3>
 					<p>
-						The data that the webpage sends back is a JSON object. The length of the response depends on what was requested 
-						and the result of the request. The response always sends an array of Objects, even if you only request a single item.
-						To access the Objects within the array, we have to use an index. The following page shows some example and details on how to
-						do this.
+						The data that the webpage sends back is a JSON object or an array of objects. The length of the response depends on what was requested 
+						and the result of the request. If you are using parameters/filters in your request, the response is always an array of Objects, 
+						even if you only request a single item. To access the Objects within the array, we have to use an index. The following page shows some example and details on how to
+						do this. 						
 						The examples below are from the <code>console.log(response)</code>. If you are in Chrome, 
 						press CNTRL-SHIFT-I or F12 to access the console and other developer tools.<br><br>
 						<div class="row">
@@ -122,6 +123,12 @@ console.log(response);
 						all the data which is formatted into key: value pairs. Some of the data is a single string value like <code>born:</code>
 						and others are arrays like <code>aliases:</code>. The next page will cover how to extract values within the object(s) for both
 						single strings and arrays.<br><br><img src="JSONdetails.jpg" class="img-thumbnail"><br><br>
+						
+						But if you are using an Object ID number in the request, it will send just the JSON Object. It will not be in an array so
+						indexing is not needed.<br><br>
+						<img src="usingID.jpg" class="img-thumbnail"><br><br>
+						Clicking on the arrows next to the Object displays the keys and values.<br><br>
+						<img src="usingIDdetails.jpg" class="img-thumbnail"><br><br>
 					</p>
 					
 					<p>

@@ -55,16 +55,98 @@
 					
 					<h3>Asynchronous Requests</h3>
 					<p>
-						When making requests you have the option to send a snychronous or asynchronous request. If you chose to send a 
+						When making requests you have the option to make it snychronous or asynchronous. If you chose to send a 
 						synchronous request, you may see a warning pop up in the console window like this: <br><br>
-						<img src="consoleWarning.jpg" class="img-thumbnail">
+						<img src="consoleWarning.jpg" class="img-thumbnail"><br><br>
+						It's a warning against making synchronous requests because it could potentially freeze the webpage as it's
+						trying to load. To avoid the browser warning and create an overall better application, let's make some changes.<br><br>
+						<strong>Before: Synchronous</strong>
+						<pre>
+var req = new XMLHttpRequest();
+req.open("GET", "http://www.anapioficeandfire.com/api/characters?name=Arya Stark", false);
+req.send(null);
+var response = JSON.parse(req.responseText);
+var aliasesList = "";
+for (var i in response[0].aliases){
+	aliasesList += response[0].aliases[i] + ", ";
+}
+document.getElementById('name').textContent = response[0].name;
+document.getElementById('culture').textContent = response[0].culture;
+document.getElementById('born').textContent = response[0].born;
+document.getElementById('aliases').textContent = aliasesList;
+						</pre><br>
+						<strong>After: Asynchronous</strong><br>
+						<pre>
+var req = new XMLHttpRequest();
+req.open("GET", "http://www.anapioficeandfire.com/api/" + inputQuery, false);
+req.addEventListener('load',function(){
+	var response = JSON.parse(req.responseText);
+	console.log(response);
+	var aliasesList = "";
+	for (var i in response[0].aliases){
+		aliasesList += response[0].aliases[i] + ", ";
+	}
+	document.getElementById('name').textContent = response[0].name;
+	document.getElementById('culture').textContent = response[0].culture;
+	document.getElementById('born').textContent = response[0].born;
+	document.getElementById('aliases').textContent = aliasesList;
+});
+req.send(null);
+						</pre><br>
+						Changes made:<br><br>
+						<code>req.addEventListener('load',function()</code>&nbsp - This callback function takes two parameters: the 
+						event to listen for and the function that it will call once that event happens. In the example, we
+						are waiting/listening for the page to load, then we can call the function. <code>function</code>
+						is defined within the <code>addEventListener</code> function. You can either do this or define the function
+						beforehand. Listening for an event such <code>'load'</code> will prevent our webpage from freezing as it's 
+						trying to process the request and response from the API. Everything inside the <code>function()</code>
+						is nothing new except now it will only take place once the page is done loading.<br><br>
+						
+						<code>event.preventDefault();</code>&nbsp - The send function is now at the bottom. It sends our
+						request only after we tell our program what to do once the page loads. <br><br>
+						
+						For more information about synchronous/asynchronous requests: <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests">
+						https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests</a><br>	
 					</p>
-					<h3>Page Limits</h3>
-					
+					<br>
+					<h3>Difference in using object IDs or Filtering in a Request</h3>
+					<p>
+						If you make a request using any filter/parameter like <code>http://www.anapioficeandfire.com/api/characters?name=Jon Stark</code>	
+						, to access all the data values in the response Object, you have to use indexing. Example: <code>response[0].culture</code>.
+						This is because the response is an array of Objects. Even when the response is a single object array.<br><br>
+						But if you use the object's ID number in the request like <code>http://www.anapioficeandfire.com/api/characters/583</code>, for any category, you don't need to 
+						index the object to extract the data value. Example: <code>response.culture</code>. The response is not an array.<br><br>
+						So when using an filter, the response will always be an array of Objects and you need to index to extract data values.
+						But if you use an ID number in the request, the response is just an Object, not an array so you don't want to index.
+					</p>
+					<br>
 					<h3>Data Key and Value Issues</h3>
-					
+					<p>
+						While testing the API with various requests, I came across a couple of issues with the some key value pairs.
+						<br><br>
+						<strong>isAlive</strong>&nbsp - The documentation lists in their character table of attributes the key isAlive which
+						holds a boolean value. Unfortunately, the key is not listed anywhere in the response and doesn't work as a filter for
+						requests.<br><br>
+						
+						<strong>died=''</strong>&nbsp - This one is an interesting issue. If you want to display the death date of a character or a list
+						of characters and they have a null value set for their <code>died</code> key, the response it unable to finish.
+					</p>
+					<br>
 					<h3>Object ID's</h3>
-
+					<p>
+						If you visit the API website you'll see that on their homepage they have a way you can test out requests. They list a few
+						examples below the textbox.<br><br>
+						<img src="tryRequest.png" class="img-thumbnail"><br><br>
+						To request a specific house, book or character you would have to enter their ID. For Jon Snow its 
+						<code>characters/583</code>. The problem is there is no way to know the object's ID number. The way around this is to
+						instead send a request using a filter. For Jon Snow the filter would be <code>characters?name=Jon Snow</code>. The only problem 
+						with using the the name filter is that you have to make sure to spell their name correctly and that there is a space
+						between their first and last name if they have one. Another problem is that there are some characters that don't have names, but they
+						do have an ID. So if you want a certain character, but don't know their name, you would have to filter your request based on
+						another attribute like culture, birthdate, alias or book they were featured in.<br><br>
+						
+						For more information about using filters, skip to <a href="guidePage3.html">How to Use the API</a>.
+					</p>
 					<div class="text-center buttons">
 						<a href="guidePage3.html" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-menu-left">Previous
 						</span></a>

@@ -13,6 +13,7 @@ function bindButtons(){
 				resultList += "<li>" +  response[obj].name + "<br>" +
 							"culture: " + response[obj].culture + "<br>" +
 							"born: " + response[obj].born + "<br>" +
+							"died: " + response[obj].died + "<br>" +
 							"aliases: ";// + "<ul>";		
 				for (var i in response[obj].aliases){
 					resultList += response[obj].aliases[i] + ", ";

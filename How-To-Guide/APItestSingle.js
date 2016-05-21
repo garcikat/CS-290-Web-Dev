@@ -9,13 +9,23 @@ function bindButtons(){
 			var response = JSON.parse(req.responseText);
 			console.log(response);
 			var aliasesList = "";
-			for (var i in response[0].aliases){
-				aliasesList += response[0].aliases[i] + ", ";
+			for (var i in response.aliases){
+				aliasesList += response.aliases[i] + ", ";
 			}
-			document.getElementById('name').textContent = response[0].name;
-			document.getElementById('culture').textContent = response[0].culture;
-			document.getElementById('born').textContent = response[0].born;
+			var allegiancesList = "";
+			for (var j in response.allegiances){
+				var req2 = new XMLHttpRequest();
+				req2.open("GET", response.allegiances[j], false);
+				req2.send(null);
+				var response2 = JSON.parse(req2.responseText);
+				
+				allegiancesList += response2.name + ", ";
+			}
+			document.getElementById('name').textContent = response.name;
+			document.getElementById('culture').textContent = response.culture;
+			document.getElementById('born').textContent = response.born;
 			document.getElementById('aliases').textContent = aliasesList;
+			document.getElementById('allegiances').textContent = allegiancesList;
 		});
 		req.send(null);
 		event.preventDefault();
