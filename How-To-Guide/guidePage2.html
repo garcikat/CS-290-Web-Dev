@@ -36,7 +36,6 @@
 		<div class="container-fluid">
 			<div class="row content">
 				<div class="col-sm-2 sidenav">
-					<h4 class="text-center">GoT API Guide</h4>
 					<ul class="nav nav-pills nav-stacked">
 						<li><a href="guideHome.html">Home</a></li>
 						<li class="active"><a href="guidePage2.html">How the API works</a></li>
@@ -49,17 +48,18 @@
 
 				<div class="col-sm-9">
 					<div class="jumbotron" style="background-color:#ffbf80">
+						<h5>How-to-Guide: An API of Ice and Fire</h5>
 						<h2>How the API Works</h2>
 					</div><!--jumbotron-->
 					
 					<h3>What is an API</h3>
 					<p>An <strong>A</strong>pplication <strong>P</strong>rogram <strong>I</strong>nterace is way for software
-					to talk to one another within a structured format. For example, let's say an app wants to the top 10
+					to talk to one another within a structured format. For example, let's say an app wants the top 10
 					headlines from a news webpage. Without an API, it would have to read the webapge and interpret the content.
-					If the news webpage would happen to change (something that happens often), then the app would not likely find
+					If the news webpage would happen to change, something that happens often, then the app would not likely find
 					the information it's looking for.
-					But with an API, an app can send a request to the news webapge in a certain format and the news webpage
-					responds back with a structured response. The app can access the data from the webpage much more easily regardless
+					But with an API, an app can send a request to the news webapge in a certain format and it will send back a 
+					structured response. The app can access the data from the webpage much more easily regardless
 					how much the webpage changes.
 					</P>
 					<h3>Request</h3>
@@ -69,17 +69,9 @@
 						<pre>
 var req = new XMLHttpRequest();
 req.open("GET", "http://www.anapioficeandfire.com/api/characters", false);
-req.addEventListener('load',function(){
-	if(req.status >= 200 && req.status < 400){ <--Katie add to common problems
-		var response = JSON.parse(req.responseText);
-		console.log(response);
-	}
-	else{ <-- Add to common problems
-		console.log("Error in network request: " + request.statusText);
-	}
-});
 req.send(null);
-event.preventDefault(); <--common problems
+var response = JSON.parse(req.responseText);
+console.log(response);
 						</pre>
 						<br>Let's break it down.<br><br>
 						<code>var req = new XMLHttpRequest();</code>&nbsp - This creates an <strong>XMLHttpRequest</strong>
@@ -88,11 +80,16 @@ event.preventDefault(); <--common problems
 						
 						<code>req.open("GET", "http://www.anapioficeandfire.com/api/characters", true);</code>&nbsp-
 						The request object is opening a GET request to the webpage <u>http://www.anapioficeandfire.com/api/characters</u>.
-						The <code>"GET"</code> argument is the type of request we are sending. It's basically used for "getting" data. The other
+						The <code>"GET"</code> argument is the type of request we are sending. It's basically used for "getting" data. The another
 						type of request is a POST but it is not used with this API. 
 						The last argument <code>false</code>  means that this is a synchronous request. If you want to send a asychronous request,
-						replace the argrument with <code>true</code>.<br><br>
+						replace the argrument with <code>true</code>. In all of the examples we use synchronous requests for simplicity reasons.
+						But it's wise to make asynchronous requests. To learn why and how skip to the <a href="guidePage4.html">Common Problems</a>
+						page.<br><br>
 						
+						<code>req.send(null);</code>&nbsp- Now we are sending the request to the webpage. Since this is a GET
+						request, we set the parameter for the <code>send</code> function to <code>null</code>. If this were a POST request, then 
+						the send function would usually take a JSON string.<br><br>						
 						<code>var response = JSON.parse(req.responseText);)</code>&nbsp- 
 						Here we are taking the response text sent to us by <u>http://www.anapioficeandfire.com/api/characters</u>
 						and parsing it into a readable format.<br><br>
@@ -100,14 +97,9 @@ event.preventDefault(); <--common problems
 						<code>console.log(response);</code>&nbsp - This logs the request to the console so that we can see 
 						the response. It's a nice thing to use to make sure we are getting the information that we want, what
 						keys are used and how the data is organized.<br><br>
-						
-						<code>req.send(null);</code>&nbsp- Now we are sending the request to the webpage. Since this is a GET
-						request, we set the parameter for the <code>send</code> function to <code>null</code>. If this were a POST request, then 
-						the send function would usually take a JSON string.<br><br>
-						
+				
 						Another thing to note is that usually APIs require the use of an appid which allows the API to track who is making a request.
-						But this API does not require any appid so you don't have to worry about registering.<br><br>
-						
+						But this API does not require any appid so you don't have to worry about registering.<br><br>					
 					</p>	
 					<h3>Response</h3>
 					<p>
@@ -116,7 +108,7 @@ event.preventDefault(); <--common problems
 						To access the Objects within the array, we have to use an index. The following page shows some example and details on how to
 						do this.
 						The examples below are from the <code>console.log(response)</code>. If you are in Chrome, 
-						press CNTRL-SHIFT-I to access the console and other developer tools.<br><br>
+						press CNTRL-SHIFT-I or F12 to access the console and other developer tools.<br><br>
 						<div class="row">
 							<div class="col-md-6">
 								The response could be a single object array: <br><br><img src="JSONobject.jpg" class="img-thumbnail">

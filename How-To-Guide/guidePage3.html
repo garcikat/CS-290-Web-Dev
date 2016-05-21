@@ -37,7 +37,6 @@
 			<div class="row content">
 			
 				<div class="col-sm-2 sidenav">
-					<h4 class="text-center">GoT API Guide</h4>
 					<ul class="nav nav-pills nav-stacked">
 						<li><a href="guideHome.html">Home</a></li>
 						<li><a href="guidePage2.html">How the API works</a></li>
@@ -50,23 +49,24 @@
 
 				<div class="col-sm-9">
 					<div class="jumbotron" style="background-color:#ffbf80">
+						<h5>How-to-Guide: An API of Ice and Fire</h5>
 						<h2>Using the API of Ice and Fire</h2>
 					</div><!--jumbotron-->
 
 					<h3>Resource Categories</h3>
 					<p>
-						There are 3 different categories of information available: books, characters and houses.
+						There are 3 different categories of information available from the API: books, characters and houses.
 						Using the API root URL <code>"http://www.anapioficeandfire.com/api"</code> in the request returns these categories and
 						their respective URLs.<br><br>
 						If the category name is included in the URL it will respond with ALL the resources within that category.<br>
 						<ul>	
-							<li>	<code>"http://www.anapioficeandfire.com/api/characters"</code>&nbsp- Returns ALL characters. Each object in the response 
+							<li><code>"http://www.anapioficeandfire.com/api/characters"</code>&nbsp- Returns ALL characters. Each object in the response 
 								represents a character.
 							</li>
 							<li><code>"http://www.anapioficeandfire.com/api/houses"</code>&nbsp- Returns ALL houses. Each object in the response 
 								represents a house.
 							</li>
-							<li><code>"http://www.anapioficeandfire.com/api/book"</code>&nbsp- Returns ALL book. Each object in the response 
+							<li><code>"http://www.anapioficeandfire.com/api/book"</code>&nbsp- Returns ALL books. Each object in the response 
 								represents a book.
 							</li>
 						</ul>
@@ -74,9 +74,9 @@
 					<br>
 					<h3>Using Filters</h3>
 					<p>
-						If you are familiar with the novels or the television series, you are aware that there are many many characters and houses. The API even has
-						data for characters that don't even have names. Using the category URLs above will return a lot of information which you 
-						will most likely not even want most of. And to sift through all the objects looking for what information you want will take a very long time. 
+						If you are familiar with the novels or the television series, you are aware that there are many characters and houses. The API has
+						data for characters that don't even have names. The category URLs above will return a significant amount of information and to sift through 
+						all the objects looking for what data you want will take a very long time. 
 						Luckily for us the developers created request filters. Using these filters allows users to access data that have certain key values.
 						<br><br>
 						For example, lets say I want all characters who's culture are "Northmen". The URL I would use in my request would be
