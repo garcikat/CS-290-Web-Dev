@@ -30,17 +30,19 @@ app.get('/',function(req,res,next){
 	
 	context.name = req.session.name;
 	context.toDoCount = req.session.toDo.length || 0;
-	context.toDo = req.session.toDo || [];
+	//context.toDo = req.session.toDo || [];
 	console.log(context.toDo);
 	
-
+	var context.toDo = {};
+	var cityTemps = [];
  for( item in req.session.toDo){
   request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+ '&units=imperial&appid=53eff64734ffc4266254f842592e4939', function(err, response, body){
     if(!err && response.statusCode < 400){
 		var something = JSON.parse(body);
-		//console.log(res);
-		console.log(body);
-		item.temp = something.main.temp;
+		cityTemps.push(something.main.temp);
+		
+		//console.log(body);
+		//item.temp = something.main.temp;
 
     } else {
       if(response){
@@ -50,6 +52,18 @@ app.get('/',function(req,res,next){
     }
   });
   }
+  
+ 	//create toDo list
+	context.toDo = {};
+	for (var i in session.toDo.lenth){
+		if(cityTemps[i] >= session.toDo[i].min){
+			var color = true;
+		}
+		else{
+			var color = false;
+		}
+		context.toDo.push({"name":session.toDo[i].name, "city":session.toDo[i].city, "min": session.toDO[i].min, "color":color, "id":session.toDO[i].id });
+	}
   
  	res.render('todoList-view',context);
 });
@@ -83,28 +97,46 @@ app.post('/',function(req,res,next){
     })
   }
   
+  //create a second list with all current temps in cities
+  var cityTemps = [];
+  
   for( item in req.session.toDo){
-  request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+'&units=imperial&appid=53eff64734ffc4266254f842592e4939', function(err, response, body){
+  request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+'&units=imperial&appid=53eff64734ffc4266254f842592e4939', 
+  function(err, response, body){
     if(!err && response.statusCode < 400){
 		var whatever = JSON.parse(body);
-		//console.log(res);
-		console.log(body);
-		item.temp = whatever.main.temp;
-      //res.render('todoList-view',context);
-    } else {
+		cityTemps.push(whatever.main.temp);
+		
+		//console.log(body);
+		//item.temp = whatever.main.temp;
+		//res.render('todoList-view',context);
+    } 
+	else {
       if(response){
         console.log(response.statusCode);
-      }
+		}
       next(err);
     }
   });
   }
+ 
+	//create toDo list
+	context.toDo = {};
+	for (var i in session.toDo.lenth){
+		if(cityTemps[i] >= session.toDo[i].min){
+			var color = true;
+		}
+		else{
+			var color = false;
+		}
+		context.toDo.push({"name":session.toDo[i].name, "city":session.toDo[i].city, "min": session.toDO[i].min, "color":color, "id":session.toDO[i].id });
+	}
   
     context.name = req.session.name;
-  context.toDoCount = req.session.toDo.length;
-  context.toDo = req.session.toDo;
-   console.log(context.toDo);
-  res.render('todoList-view',context);
+	context.toDoCount = req.session.toDo.length;
+	//context.toDo = req.session.toDo;
+	console.log(context.toDo);
+	res.render('todoList-view',context);
 });
 
 app.use(function(req,res){
