@@ -1,0 +1,48 @@
+<h1>Hello {{name}} Here is your To Do List!</h1>
+<h2>You have {{toDoCount}} items on your to do list.</h2>
+<form method="post">
+	<label for="toDoName">Description: </label>
+	<input type="text" name="name" id="toDoName">
+	
+	<label for="cityName">City, State: </label>
+	<input type="text" name="city" id="cityName">
+	
+	<label for="minTemp">Min Temp</label>
+	<input type="number" name="min" id="minTemp">F
+	<br><br>
+	<input type="submit" name="Add Item" value="Add Item">
+</form>
+
+<br><br><h3>Things to Do</h3><br>
+{{#if toDo}}
+<table id="list">
+	<thead>
+		<tr>
+			<th>Description</th>
+			<th>City</th>
+			<th>Min. Temp</th>
+			<th>Current Temp</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#each toDo}}
+			{{#if this.color}}
+				<tr bgcolor="green">
+			{{else}}
+				<tr bgcolor="red">
+			{{/if}}
+				<td>{{this.name}}</td>
+				<td>{{this.city}}</td>
+				<td>{{this.min}}</td>
+				<td>{{this.temp}}</td>
+					<form method="post">
+						<input type="hidden" name="id" value="{{this.id}}">
+						<input type="submit" name="Done" value="Mark as Done">
+					</form>
+				</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>
+{{/if}}
