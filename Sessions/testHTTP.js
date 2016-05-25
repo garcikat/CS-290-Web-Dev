@@ -30,53 +30,63 @@ app.get('/',function(req,res,next){
 	
 	context.name = req.session.name;
 	context.toDoCount = req.session.toDo.length || 0;
-	//context.toDo = req.session.toDo || [];
-	console.log(context.toDo);
+	context.toDo = req.session.toDo || [];
+	context.cityTemps = req.session.cityTemps || [];
+	//console.log(context.toDo);
 	
-	var context.toDo = {};
-	var cityTemps = [];
- for( item in req.session.toDo){
-  request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+ '&units=imperial&appid=53eff64734ffc4266254f842592e4939', function(err, response, body){
-    if(!err && response.statusCode < 400){
-		var something = JSON.parse(body);
-		cityTemps.push(something.main.temp);
-		
-		//console.log(body);
-		//item.temp = something.main.temp;
+	/*for( item in req.session.toDo){
+		request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+ '&units=imperial&appid=53eff64734ffc4266254f842592e4939', 
+			function(err, response, body){
+				if(!err && response.statusCode < 400){
+					var something = JSON.parse(body);
+					var temp = something.main.temp;
+					//console.log("new temp:", temp);
+					req.session.cityTemps.push(something.main.temp);
+					//console.log("cityTemp:",cityTemps);
+					//console.log(body);
+					//item.temp = something.main.temp;
 
-    } else {
-      if(response){
-        console.log(response.statusCode);
-      }
-      next(err);
-    }
-  });
-  }
+				} 
+				else {
+					if(response){
+					console.log(response.statusCode);
+					}
+					next(err);
+				}
+			}
+		);
+	}*/
+
   
- 	//create toDo list
-	context.toDo = {};
-	for (var i in session.toDo.lenth){
-		if(cityTemps[i] >= session.toDo[i].min){
-			var color = true;
+	/*if(req.session.toDo.length >= 0){
+		//create toDo list
+		for (var i in req.session.toDo.length){
+			if(cityTemps[i] >= req.session.toDo[i].min){
+				var color = true;
+			}
+			else{
+				var color = false;
+			}	
+			context.toDo.push({"name":req.session.toDo[i].name, "city":req.session.toDo[i].city, "min": req.session.toDO[i].min, "color":color, "id":req.session.toDO[i].id });
 		}
-		else{
-			var color = false;
-		}
-		context.toDo.push({"name":session.toDo[i].name, "city":session.toDo[i].city, "min": session.toDO[i].min, "color":color, "id":session.toDO[i].id });
-	}
-  
+	}*/
+	
+	//context.cityTemps = cityTemps;
+	console.log(context);
  	res.render('todoList-view',context);
 });
 
 app.post('/',function(req,res,next){
   var context = {};
-  
+  var canRender = false;
 
   //started account
   if(req.body['New List']){
     req.session.name = req.body.name;
     req.session.toDo = [];
     req.session.curId = 0;
+	req.session.cityTemps = [];
+	canRender = true;
   }
 
   //If there is no session, go to the main page.
@@ -89,54 +99,61 @@ app.post('/',function(req,res,next){
   if(req.body['Add Item']){
     req.session.toDo.push({"name":req.body.name, "city":req.body.city, "min":req.body.min, "temp": 0, "id":req.session.curId});
     req.session.curId++;
+	console.log("just push item in toDo list");
+	request('http://api.openweathermap.org/data/2.5/weather?q='+req.body.city+ '&units=imperial&appid=53eff64734ffc4266254f842592e4939', 
+			function(err, response, body){
+				if(!err && response.statusCode < 400){
+					var something = JSON.parse(body);
+					var temp = something.main.temp;
+					req.session.cityTemps.push(something.main.temp);
+					console.log("just push into session cityTemps");
+					canRender = true;
+				} 
+				else {
+					if(response){
+					console.log(response.statusCode);
+					}
+					next(err);
+				}
+			}
+	);
+	
   }
 
   if(req.body['Done']){
     req.session.toDo = req.session.toDo.filter(function(e){
       return e.id != req.body.id;
     })
-  }
-  
-  //create a second list with all current temps in cities
-  var cityTemps = [];
-  
-  for( item in req.session.toDo){
-  request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+'&units=imperial&appid=53eff64734ffc4266254f842592e4939', 
-  function(err, response, body){
-    if(!err && response.statusCode < 400){
-		var whatever = JSON.parse(body);
-		cityTemps.push(whatever.main.temp);
-		
-		//console.log(body);
-		//item.temp = whatever.main.temp;
-		//res.render('todoList-view',context);
-    } 
-	else {
-      if(response){
-        console.log(response.statusCode);
-		}
-      next(err);
-    }
-  });
+	canRender = true;
   }
  
-	//create toDo list
-	context.toDo = {};
-	for (var i in session.toDo.lenth){
-		if(cityTemps[i] >= session.toDo[i].min){
-			var color = true;
-		}
-		else{
-			var color = false;
-		}
-		context.toDo.push({"name":session.toDo[i].name, "city":session.toDo[i].city, "min": session.toDO[i].min, "color":color, "id":session.toDO[i].id });
-	}
-  
+	//var cityTemps = [];
+	/*for( item in req.session.toDo){
+		request('http://api.openweathermap.org/data/2.5/weather?q='+item.city+ '&units=imperial&appid=53eff64734ffc4266254f842592e4939', 
+			function(err, response, body){
+				if(!err && response.statusCode < 400){
+					var something = JSON.parse(body);
+					var temp = something.main.temp;
+					req.session.cityTemps.push(something.main.temp);
+
+				} 
+				else {
+					if(response){
+					console.log(response.statusCode);
+					}
+					next(err);
+				}
+			}
+		);
+	} */
+ if(canRender){
     context.name = req.session.name;
 	context.toDoCount = req.session.toDo.length;
-	//context.toDo = req.session.toDo;
-	console.log(context.toDo);
+	context.toDo = req.session.toDo;
+	context.cityTemps = req.session.cityTemps;
+	console.log(context);
 	res.render('todoList-view',context);
+ }
 });
 
 app.use(function(req,res){
